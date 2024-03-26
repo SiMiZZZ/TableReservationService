@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  pg_db:
+    image: postgres:15-alpine
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./postgres-data/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    container_name: db
+
+
+  app:
+    restart: always
+    env_file:
+      - .env
+    build: ./
+    command: bash -c "cd src && poetry run gunicorn app:app --timeout 120 --workers 4 --bind 0.0.0.0:8000 --log-level DEBUG --worker-class uvicorn.workers.UvicornWorker"
+    ports:
+      - "8000:8000"
+    container_name: app
