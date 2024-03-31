@@ -4,16 +4,16 @@ from pydantic import BaseModel, EmailStr, ConfigDict
 class UserAuthReturn(BaseModel):
     model_config = ConfigDict(strict=True)
 
-    username: EmailStr
+    email: EmailStr
     id: int
     token: str
 
 
 class UserAuthData(BaseModel):
-    username: EmailStr
+    email: EmailStr
     password: str
 
 class UserData(BaseModel):
-    username: EmailStr
+    email: EmailStr
     role: str
     id: int

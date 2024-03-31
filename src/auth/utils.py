@@ -1,7 +1,11 @@
+import random
+import string
+
 import bcrypt
 import jwt
+from jwt import InvalidTokenError
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, HTTPAuthorizationCredentials, HTTPBearer
 from jwt import InvalidTokenError
 
 from config import settings
@@ -9,6 +13,7 @@ from datetime import datetime, timedelta
 
 from schemas.user import UserData
 
+http_bearer = HTTPBearer()
 
 def encode_jwt(payload: dict,
                private_key: str = settings.PRIVATE_KEY_PATH.read_text(),
@@ -33,28 +38,31 @@ def hash_password(password: str) -> bytes:
     bytes_password: bytes = password.encode()
     return bcrypt.hashpw(bytes_password, salt)
 
+def generate_password():
+    password = ""
+    alphabet = string.ascii_letters + string.digits
+    for a in range(10):
+        password += random.choice(alphabet)
+    return password
+
 def validate_password(password: str, hashed_password: bytes) -> bool:
 
     return bcrypt.checkpw(password.encode(), hashed_password)
 
-
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="/api/auth/login",
-)
-
-def get_current_token_payload(
-    # credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
-    token: str = Depends(oauth2_scheme),
-) -> dict:
-    # token = credentials.credentials
+async def get_current_token_payload(credentials: HTTPAuthorizationCredentials = Depends(http_bearer)):
+    token = credentials.credentials
     try:
         payload = decode_jwt(
-            token=token,
+            token=token
         )
-    except InvalidTokenError as e:
+    except InvalidTokenError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"invalid token error: {e}",
-            # detail=f"invalid token error",
+            detail="Invalid token error"
         )
     return payload
+
+async def get_current_user_id(payload: dict = Depends(get_current_token_payload)):
+    return payload.get("id")
+
+
