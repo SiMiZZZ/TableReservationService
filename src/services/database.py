@@ -63,7 +63,7 @@ class DatabaseSessionManager:
 
 
 sessionmanager = DatabaseSessionManager()
-sessionmanager.init(settings.DB_CONFIG)
+# sessionmanager.init(settings.DB_CONFIG)
 
 async def get_db():
     async with sessionmanager.session() as session:

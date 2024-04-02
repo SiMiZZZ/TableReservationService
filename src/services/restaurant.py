@@ -38,10 +38,6 @@ class RestaurantService:
 
         restaurant_info = RestaurantCreate(
             name=restaurant.name,
-            city=restaurant.city,
-            description=restaurant.description,
-            latitude=restaurant.latitude,
-            longitude=restaurant.longitude,
             account_id=admin_account.id
         )
 
@@ -91,6 +87,7 @@ class RestaurantService:
 
     async def update_restaurant_data(self, restaurant: RestaurantUpdate, payload: dict, db: AsyncSession):
         user_role = payload.get("role")
+        print(payload)
         if user_role not in UserRole.ADMIN:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,

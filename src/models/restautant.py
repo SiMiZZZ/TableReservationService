@@ -3,9 +3,10 @@ from enum import Enum
 import uuid as uuid_pkg
 
 import sqlalchemy
-from sqlalchemy import Column, String, select, Integer, ForeignKey
+from sqlalchemy import Column, String, select, Integer, ForeignKey, Boolean
 from sqlalchemy.dialects.postgresql import UUID, BYTEA
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import ARRAY
 from fastapi_restful.guid_type import GUID
 from sqlalchemy.sql import func
 from sqlalchemy.types import LargeBinary
@@ -22,7 +23,12 @@ class Restaurant(Base):
     city = Column(String, nullable=True)
     latitude = Column(String, nullable=True)
     longitude = Column(String, nullable=True)
+    address = Column(String, nullable=True)
+    site = Column(String, nullable=True)
+    tags = Column(ARRAY(String), nullable=True)
     account = relationship(User, lazy="selectin")
+    phone_number = Column(String, nullable=True)
+    active = Column(Boolean, nullable=True, default=False)
     account_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
 
