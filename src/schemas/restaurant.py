@@ -36,6 +36,8 @@ class RestaurantUpdate(BaseModel):
     tags: Optional[list[str]] = None
     phone_number: Optional[str] = None
     active: Optional[bool] = None
+    open_from: Optional[str] = None
+    open_to: Optional[str] = None
 
 
 class RestaurantInfo(BaseModel):
@@ -51,3 +53,5 @@ class RestaurantInfo(BaseModel):
     phone_number: str | None
     active: bool | None
     account_id: int | None
+    open_from: str | None
+    open_to: str | None

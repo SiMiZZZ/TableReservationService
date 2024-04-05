@@ -30,5 +30,7 @@ class Restaurant(Base):
     phone_number = Column(String, nullable=True)
     active = Column(Boolean, nullable=True, default=False)
     account_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    open_from = Column(String, nullable=True)
+    open_to = Column(String, nullable=True)
 
 
