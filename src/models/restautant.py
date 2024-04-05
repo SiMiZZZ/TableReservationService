@@ -25,7 +25,7 @@ class Restaurant(Base):
     longitude = Column(String, nullable=True)
     address = Column(String, nullable=True)
     site = Column(String, nullable=True)
-    tags = Column(ARRAY(String), nullable=True)
+    tags = Column(ARRAY(String), nullable=True, default=[])
     account = relationship(User, lazy="selectin")
     phone_number = Column(String, nullable=True)
     active = Column(Boolean, nullable=True, default=False)
