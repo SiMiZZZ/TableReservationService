@@ -3,7 +3,7 @@ from enum import Enum
 import uuid as uuid_pkg
 
 import sqlalchemy
-from sqlalchemy import Column, String, select, Integer, ForeignKey, Boolean
+from sqlalchemy import Column, String, select, Integer, ForeignKey, Boolean, Float
 from sqlalchemy.dialects.postgresql import UUID, BYTEA
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -21,8 +21,8 @@ class Restaurant(Base):
     name = Column(String)
     description = Column(String, nullable=True)
     city = Column(String, nullable=True)
-    latitude = Column(String, nullable=True)
-    longitude = Column(String, nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
     address = Column(String, nullable=True)
     site = Column(String, nullable=True)
     tags = Column(ARRAY(String), nullable=True, default=[])

@@ -7,8 +7,8 @@ class RestaurantCreate(BaseModel):
     name: str
     city: str | None = None
     description: str | None = None
-    latitude: str | None = None
-    longitude: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
     account_id: int | None = None
 
 
@@ -29,8 +29,8 @@ class RestaurantUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     city: Optional[str] = None
-    latitude: Optional[str] = None
-    longitude: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
     address: Optional[str] = None
     site: Optional[str] = None
     tags: Optional[list[str]] = None
@@ -45,8 +45,8 @@ class RestaurantInfo(BaseModel):
     name: str
     description: str | None
     city: str | None
-    latitude: str | None
-    longitude: str | None
+    latitude: float | None
+    longitude: float | None
     address: str | None
     site: str | None
     tags: list[str] | None
