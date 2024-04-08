@@ -7,6 +7,7 @@ from repositories.user import UserRepository
 from repositories.restaurant import RestaurantRepository
 from schemas.restaurant import RestaurantCreate, RestaurantInfo, CreatedRestaurant, RestaurantCreateFromAPI, \
     RestaurantUpdate
+from schemas.user import UserCreate, NewUserReturn
 from auth.utils import *
 from models.user import UserRole
 
@@ -99,3 +100,37 @@ class RestaurantService:
 
         updated_restaurant = await self.restaurant_repository.update_restaurant(founded_restaurant, restaurant, db)
         return updated_restaurant
+
+    async def get_staff_users(self, payload: dict, db: AsyncSession) -> List[UserData]:
+        pass
+
+    async def create_staff_user(self, user: UserCreate, payload: dict, db: AsyncSession):
+        user_role = payload.get("role")
+        if user_role not in UserRole.ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You dont have permission to this action"
+            )
+
+        has_user = await self.user_repository.get_user_by_email_or_none(user.email, db)
+        if has_user:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="User with current email is already registered"
+            )
+
+        # Создание пользователя работника ресторана
+        password = generate_password()
+        hashed_password = hash_password(password)
+        staff_account = await self.user_repository.create_user(user.email, hashed_password, db,
+                                                               role=UserRole.STAFF)
+        new_user = NewUserReturn(
+            id=staff_account.id,
+            email=staff_account.email,
+            role=staff_account.role,
+            password=password
+        )
+
+        return new_user
+
+

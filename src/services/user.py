@@ -41,3 +41,4 @@ class UserService:
         if not user:
             raise HTTPException(status_code=400, detail="Incorrect id")
         return user
+
