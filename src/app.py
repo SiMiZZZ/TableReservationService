@@ -15,10 +15,7 @@ app.include_router(superadmin_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")
 
 origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:5173",
-    "https://alfa-booking-admin.netlify.app"
+    "*"
 ]
 
 app.add_middleware(
