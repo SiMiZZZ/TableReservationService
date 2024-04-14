@@ -10,6 +10,4 @@ services:
     ports:
       - "8000:8000"
     container_name: app
-    depends_on:
-      - pg_db
 
