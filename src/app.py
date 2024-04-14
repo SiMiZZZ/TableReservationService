@@ -18,6 +18,7 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:5173",
+    "https://alfa-booking-admin.netlify.app"
 ]
 
 app.add_middleware(
