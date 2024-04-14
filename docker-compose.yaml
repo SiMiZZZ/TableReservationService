@@ -12,3 +12,4 @@ services:
     container_name: app
     depends_on:
       - pg_db
+
