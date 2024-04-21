@@ -50,11 +50,11 @@ class RestaurantRepository:
         restaurant_image = RestaurantImage(**restaurant_image.dict())
         db.add(restaurant_image)
         await db.commit()
+        await db.refresh(restaurant_image)
         return restaurant_image
 
     async def get_images_by_restaurants(self, restaurant_id: int, db: AsyncSession) -> List[RestaurantImage]:
         q = select(RestaurantImage).where(RestaurantImage.restaurant_id == restaurant_id)
         exec = await db.execute(q)
         restaurant_images = exec.scalars().all()
-        print(restaurant_images)
         return restaurant_images

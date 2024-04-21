@@ -66,7 +66,7 @@ async def get_all_tags(payload: dict = Depends(get_current_token_payload)):
     return await restaurant_service.get_restaurant_tags(payload)
 
 
-@router.post("/restaurants/{restaurant_id}")
+@router.post("/restaurants/{restaurant_id}/images")
 async def upload(restaurant_id: int,
            files: List[UploadFile] = File(...),
            payload: dict = Depends(get_current_token_payload),
