@@ -16,5 +16,5 @@ restaurant_service = RestaurantService()
 
 @router.get("/restaurants/{restaurant_id}/images")
 async def get_all_restaurant_images(request: Request, restaurant_id: int, db: AsyncSession = Depends(get_db)):
-    host = request.client.host
+    host = request.headers.get("referer")
     return await restaurant_service.get_restaurants_image(host, restaurant_id, db)

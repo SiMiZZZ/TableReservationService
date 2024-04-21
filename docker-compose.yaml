@@ -4,7 +4,7 @@ services:
   app:
     restart: always
     volumes:
-      - /home/simizzz/media/:/app/src/media
+      - /home/simizzz/media/:/app/src/media/
     env_file:
       - .env
     build: ./
