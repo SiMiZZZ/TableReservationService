@@ -31,16 +31,14 @@ async def create_restaurant(restaurant: RestaurantCreateFromAPI,
 
 
 @router.get("/restaurants", response_model=List[RestaurantInfo])
-async def get_all_restaurants(payload: dict = Depends(get_current_token_payload),
-                              db: AsyncSession = Depends(get_db)):
+async def get_all_restaurants(db: AsyncSession = Depends(get_db)):
     """
     Получение списка всех созданных ресторанов
 
 
     Доступно только для пользователя с ролью Superadmin
     """
-    role = payload.get("role")
-    return await restaurant_service.get_list_of_restaurants(role, db)
+    return await restaurant_service.get_list_of_restaurants(db)
 
 
 @router.get("/restaurants/{restaurant_id}", response_model=RestaurantInfo)

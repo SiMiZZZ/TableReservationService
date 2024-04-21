@@ -23,4 +23,6 @@ class Settings:
     JWT_ALGORITHM: str = env("JWT_ALGORITHM")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = env("ACCESS_TOKEN_EXPIRE_MINUTES")
 
+    MEDIA_ROOT: str = env("MEDIA_ROOT")
+
 settings = Settings

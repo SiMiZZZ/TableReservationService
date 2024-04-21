@@ -1,9 +1,10 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile, File
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import schemas
+from starlette.responses import FileResponse
 
 from schemas.restaurant import (RestaurantInfo, RestaurantCreate, RestaurantCreateFromAPI,
                                 CreatedRestaurant, RestaurantUpdate)
@@ -61,3 +62,16 @@ async def get_all_staff_users(payload: dict = Depends(get_current_token_payload)
 @router.get("/tags/")
 async def get_all_tags(payload: dict = Depends(get_current_token_payload)):
     return await restaurant_service.get_restaurant_tags(payload)
+
+
+@router.post("/restaurants/{restaurant_id}")
+async def upload(restaurant_id: int,
+           files: List[UploadFile] = File(...),
+           # payload: dict = Depends(get_current_token_payload),
+           db: AsyncSession = Depends(get_db)):
+    return await restaurant_service.create_restaurant_image(files, restaurant_id,  db)
+
+
+@router.get("/restaurants/{restaurant_id}/imgages}")
+async def get_imgages():
+    return FileResponse()

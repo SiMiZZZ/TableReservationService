@@ -4,7 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from models.user import User as UserModel
 from models.restautant import Restaurant as RestaurantModel
-from schemas.restaurant import RestaurantCreate, RestaurantUpdate, CreatedRestaurant
+from models.restaurant_image import RestaurantImage
+from schemas.restaurant import RestaurantCreate, RestaurantUpdate, CreatedRestaurant, RestaurantImageCreate
 
 
 class RestaurantRepository:
@@ -43,3 +44,10 @@ class RestaurantRepository:
         exec = await db.execute(q)
         restaurant = exec.scalar()
         return restaurant
+
+    async def create_restaurant_image(self, restaurant_image: RestaurantImageCreate,
+                                      db: AsyncSession) -> RestaurantImage:
+        restaurant_image = RestaurantImage(**restaurant_image.dict())
+        db.add(restaurant_image)
+        await db.commit()
+        return restaurant_image

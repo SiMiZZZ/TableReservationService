@@ -8,9 +8,13 @@ from repositories.restaurant import RestaurantRepository
 from schemas.restaurant import RestaurantCreate, RestaurantInfo, CreatedRestaurant, RestaurantCreateFromAPI, \
     RestaurantUpdate
 from schemas.user import UserCreate, NewUserReturn
+from schemas.restaurant import RestaurantImageCreate
 from auth.utils import *
 from models.user import UserRole
 from consts import restaurant_tags
+from fastapi import File
+from config import settings
+import os
 
 
 class RestaurantService:
@@ -51,12 +55,7 @@ class RestaurantService:
 
         return created_restaurant
 
-    async def get_list_of_restaurants(self, user_role: str, db: AsyncSession) -> List[RestaurantInfo]:
-        if user_role != UserRole.SUPER_ADMIN:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="You dont have permission to this action"
-            )
+    async def get_list_of_restaurants(self, db: AsyncSession) -> List[RestaurantInfo]:
         restaurants = await self.restaurant_repository.get_all_restaurants(db)
         return restaurants
 
@@ -143,4 +142,18 @@ class RestaurantService:
             )
         return restaurant_tags.tags
 
+    async def create_restaurant_image(self, files: List[File], restaurant_id: int,  db: AsyncSession):
+        media_root = settings.MEDIA_ROOT + f"{restaurant_id}/"
+        for file in files:
+
+            contents = file.file.read()
+            os.makedirs(os.path.dirname(media_root + file.filename), exist_ok=True)
+            with open(media_root + file.filename, "wb+") as f:
+                f.write(contents)
+                await self.restaurant_repository.create_restaurant_image(RestaurantImageCreate(
+                    path=media_root + file.filename,
+                    name=file.filename,
+                    restaurant_id=restaurant_id),
+                    db)
+        pass
 
