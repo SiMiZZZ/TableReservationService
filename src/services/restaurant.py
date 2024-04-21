@@ -145,7 +145,6 @@ class RestaurantService:
     async def create_restaurant_image(self, files: List[File], restaurant_id: int,  db: AsyncSession):
         media_root = settings.MEDIA_ROOT + f"{restaurant_id}/"
         for file in files:
-
             contents = file.file.read()
             os.makedirs(os.path.dirname(media_root + file.filename), exist_ok=True)
             with open(media_root + file.filename, "wb+") as f:
@@ -155,5 +154,16 @@ class RestaurantService:
                     name=file.filename,
                     restaurant_id=restaurant_id),
                     db)
-        pass
+
+    async def get_restaurants_image(self, host,restaurant_id: int, db: AsyncSession):
+
+        images = await self.restaurant_repository.get_images_by_restaurants(restaurant_id, db)
+        return_lst = []
+        for image in images:
+            return_lst.append(
+                f"{host}:8000/api/media/{restaurant_id}/{image.name}"
+            )
+
+        return return_lst
+
 
