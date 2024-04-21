@@ -89,6 +89,7 @@ class RestaurantService:
 
         user_id = payload.get("id")
         restaurant = await self.restaurant_repository.get_restaurant_by_owner_id(user_id, db)
+        restaurant.image = None
         return restaurant
 
     async def update_restaurant_data(self, restaurant: RestaurantUpdate, payload: dict, db: AsyncSession):
