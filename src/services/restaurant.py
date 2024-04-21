@@ -105,6 +105,7 @@ class RestaurantService:
         founded_restaurant = await self.restaurant_repository.get_restaurant_by_owner_id(user_id, db)
 
         updated_restaurant = await self.restaurant_repository.update_restaurant(founded_restaurant, restaurant, db)
+        updated_restaurant.image = None
         return updated_restaurant
 
     async def get_staff_users(self, payload: dict, db: AsyncSession) -> List[UserData]:
