@@ -162,7 +162,7 @@ class RestaurantService:
         return_lst = []
         for image in images:
             return_lst.append(
-                f"85.10.216.104/api/media/{restaurant_id}/{image.name}"
+                f"https://85.10.216.104/api/media/{restaurant_id}/{image.name}"
             )
 
         return return_lst
