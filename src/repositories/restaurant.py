@@ -45,12 +45,13 @@ class RestaurantRepository:
         restaurant = exec.scalar()
         return restaurant
 
-    async def create_restaurant_image(self, restaurant_image: RestaurantImageCreate,
+    async def create_restaurant_image(self, restaurant_image_schema: RestaurantImageCreate,
                                       db: AsyncSession) -> RestaurantImage:
-        restaurant_image = RestaurantImage(**restaurant_image.dict())
+        restaurant_image = RestaurantImage(**restaurant_image_schema.dict())
         db.add(restaurant_image)
+        print(restaurant_image)
         await db.commit()
-        await db.refresh(restaurant_image)
+        print("###############################################")
         return restaurant_image
 
     async def get_images_by_restaurants(self, restaurant_id: int, db: AsyncSession) -> List[RestaurantImage]:

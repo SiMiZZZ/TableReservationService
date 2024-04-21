@@ -61,18 +61,19 @@ async def get_all_staff_users(payload: dict = Depends(get_current_token_payload)
                               db: AsyncSession = Depends(get_db)):
     return await restaurant_service.get_staff_users(payload, db)
 
+
 @router.get("/tags/")
 async def get_all_tags(payload: dict = Depends(get_current_token_payload)):
     return await restaurant_service.get_restaurant_tags(payload)
 
 
 @router.post("/restaurants/{restaurant_id}/images")
-async def upload(restaurant_id: int,
-           files: List[UploadFile] = File(...),
-           payload: dict = Depends(get_current_token_payload),
-           db: AsyncSession = Depends(get_db)):
-    await restaurant_service.create_restaurant_image(files, restaurant_id, db)
-    return Response(status_code=201)
+async def upload_restaurant_image(restaurant_id: int,
+                                  files: List[UploadFile] = File(...),
+                                  db: AsyncSession = Depends(get_db),
+                                  payload: dict = Depends(get_current_token_payload)):
+    # await restaurant_service.create_restaurant_image(files, restaurant_id, db)
+    return await restaurant_service.create_restaurant_image(files, restaurant_id, db)
 
 
 @router.get("/restaurants/{restaurant_id}/imgages", response_class=FileResponse)

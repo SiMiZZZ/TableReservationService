@@ -154,6 +154,7 @@ class RestaurantService:
                     name=file.filename,
                     restaurant_id=restaurant_id),
                     db)
+                f.close()
 
     async def get_restaurants_image(self, host,restaurant_id: int, db: AsyncSession):
 

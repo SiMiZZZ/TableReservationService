@@ -3,6 +3,8 @@ version: '3.1'
 services:
   app:
     restart: always
+    volumes:
+      - /home/simizzz/media/:/app/src/media
     env_file:
       - .env
     build: ./
