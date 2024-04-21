@@ -55,6 +55,7 @@ class RestaurantInfo(BaseModel):
     account_id: int | None
     open_from: str | None
     open_to: str | None
+    image: str | None
 
 
 class RestaurantImageCreate(BaseModel):

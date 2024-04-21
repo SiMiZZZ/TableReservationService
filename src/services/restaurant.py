@@ -15,6 +15,7 @@ from consts import restaurant_tags
 from fastapi import File
 from config import settings
 import os
+from .database import sessionmanager
 
 
 class RestaurantService:
@@ -57,6 +58,10 @@ class RestaurantService:
 
     async def get_list_of_restaurants(self, db: AsyncSession) -> List[RestaurantInfo]:
         restaurants = await self.restaurant_repository.get_all_restaurants(db)
+        restaurant_schemas = []
+        for restaurant in restaurants:
+            restaurant_image = await self.get_restaurants_image("00", restaurant.id, db)
+            restaurant.image = restaurant_image[0] if restaurant_image else None
         return restaurants
 
     async def get_restaurant_by_id(self, user_role, restaurant_id: int, db: AsyncSession) -> RestaurantInfo:
@@ -156,7 +161,7 @@ class RestaurantService:
                     db)
                 f.close()
 
-    async def get_restaurants_image(self, host,restaurant_id: int, db: AsyncSession):
+    async def get_restaurants_image(self, host, restaurant_id: int, db: AsyncSession):
 
         images = await self.restaurant_repository.get_images_by_restaurants(restaurant_id, db)
         return_lst = []
