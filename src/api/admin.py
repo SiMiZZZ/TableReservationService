@@ -57,3 +57,7 @@ async def create_staff_user(user: UserCreate,
 async def get_all_staff_users(payload: dict = Depends(get_current_token_payload),
                               db: AsyncSession = Depends(get_db)):
     return await restaurant_service.get_staff_users(payload, db)
+
+@router.get("/tags/")
+async def get_all_tags(payload: dict = Depends(get_current_token_payload)):
+    return await restaurant_service.get_restaurant_tags(payload)

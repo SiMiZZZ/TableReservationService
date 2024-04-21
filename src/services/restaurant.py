@@ -10,6 +10,7 @@ from schemas.restaurant import RestaurantCreate, RestaurantInfo, CreatedRestaura
 from schemas.user import UserCreate, NewUserReturn
 from auth.utils import *
 from models.user import UserRole
+from consts import restaurant_tags
 
 
 class RestaurantService:
@@ -132,5 +133,14 @@ class RestaurantService:
         )
 
         return new_user
+
+    async def get_restaurant_tags(self, payload: dict):
+        user_role = payload.get("role")
+        if user_role != UserRole.ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You dont have permission to this action"
+            )
+        return restaurant_tags.tags
 
 
