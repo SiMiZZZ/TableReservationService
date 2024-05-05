@@ -1,7 +1,7 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, EmailStr, ConfigDict
-
+from .table import TableInfo
 
 class RestaurantCreate(BaseModel):
     name: str
@@ -56,9 +56,11 @@ class RestaurantInfo(BaseModel):
     open_from: str | None
     open_to: str | None
     image: str | None
+    tables: List[TableInfo]
 
 
 class RestaurantImageCreate(BaseModel):
     path: str
     name: str
     restaurant_id: int
+

@@ -28,6 +28,7 @@ class Restaurant(Base):
     site = Column(String, nullable=True)
     tags = Column(ARRAY(String), nullable=True, default=[])
     account = relationship(User, lazy="selectin")
+    tables = relationship("Table", back_populates="restaurant", uselist=True)
     phone_number = Column(String, nullable=True)
     active = Column(Boolean, nullable=True, default=False)
     account_id = Column(Integer, ForeignKey("users.id"), nullable=True)

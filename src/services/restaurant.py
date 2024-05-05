@@ -5,10 +5,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from repositories.user import UserRepository
 from repositories.restaurant import RestaurantRepository
+from repositories.table import TableRepository
 from schemas.restaurant import RestaurantCreate, RestaurantInfo, CreatedRestaurant, RestaurantCreateFromAPI, \
     RestaurantUpdate
 from schemas.user import UserCreate, NewUserReturn
 from schemas.restaurant import RestaurantImageCreate
+from schemas.table import TableInfo
 from auth.utils import *
 from models.user import UserRole
 from consts import restaurant_tags
@@ -22,6 +24,7 @@ class RestaurantService:
     def __init__(self):
         self.restaurant_repository = RestaurantRepository()
         self.user_repository = UserRepository()
+        self.table_repository = TableRepository()
 
     async def create_restaurant(self, user_role: str,
                                 restaurant: RestaurantCreateFromAPI, db: AsyncSession) -> CreatedRestaurant:
@@ -173,5 +176,18 @@ class RestaurantService:
             )
 
         return return_lst
+
+    async def create_table(self, payload: dict, db: AsyncSession) -> TableInfo:
+        user_role = payload.get("role")
+        if user_role not in UserRole.ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You dont have permission to this action"
+            )
+
+        user_id = payload.get("id")
+        founded_restaurant = await self.restaurant_repository.get_restaurant_by_owner_id(user_id, db)
+        new_table = await self.table_repository.create_table(founded_restaurant.id, db)
+        return new_table
 
 
