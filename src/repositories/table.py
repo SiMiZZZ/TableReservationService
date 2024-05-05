@@ -1,7 +1,7 @@
 from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.orm import selectinload
 
 from models.user import User as UserModel
@@ -21,3 +21,8 @@ class TableRepository:
         await db.commit()
         await db.refresh(table)
         return table
+
+    async def delete_table(self, table_id: int, db: AsyncSession) -> None:
+        q = delete(TableModel).where(TableModel.id == table_id)
+        await db.execute(q)
+        await db.commit()

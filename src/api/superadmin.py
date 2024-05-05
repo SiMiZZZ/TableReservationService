@@ -47,9 +47,6 @@ async def get_restaurant_by_id(restaurant_id: int,
                                db: AsyncSession = Depends(get_db)):
     """
     Получение информации о ресторане по его id
-
-
-    Доступно только для пользователя с ролью Superadmin
     """
     role = payload.get("role")
     return await restaurant_service.get_restaurant_by_id(role, restaurant_id, db)

@@ -83,7 +83,15 @@ async def get_imgages():
     return os.getcwd() + "/media/1/Фаербол.png"
 
 
-@router.post("/restaurants/table", response_model=TableInfo)
+@router.post("/restaurants/tables", response_model=TableInfo)
 async def create_table(db: AsyncSession = Depends(get_db),
                        payload: dict = Depends(get_current_token_payload)):
     return await restaurant_service.create_table(payload, db)
+
+
+@router.delete("/restaurants/tables/{table_id}")
+async def delete_table(table_id: int,
+                       db: AsyncSession = Depends(get_db),
+                       payload: dict = Depends(get_current_token_payload)):
+    await restaurant_service.delete_table(table_id, payload, db)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

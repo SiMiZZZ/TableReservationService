@@ -31,7 +31,7 @@ class RestaurantRepository:
 
     async def get_restaurant_by_id_or_none(self, id: int,
                                    db: AsyncSession) -> RestaurantModel | None:
-        q = select(RestaurantModel).where(RestaurantModel.id == id)
+        q = select(RestaurantModel).where(RestaurantModel.id == id).options(selectinload(RestaurantModel.tables).selectinload(Table.restaurant))
         exec = await db.execute(q)
         user = exec.scalar()
         return user

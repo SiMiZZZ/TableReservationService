@@ -68,13 +68,10 @@ class RestaurantService:
         return restaurants
 
     async def get_restaurant_by_id(self, user_role, restaurant_id: int, db: AsyncSession) -> RestaurantInfo:
-        if user_role != UserRole.SUPER_ADMIN:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="You dont have permission to this action"
-            )
 
         restaurant = await self.restaurant_repository.get_restaurant_by_id_or_none(restaurant_id, db)
+        restaurant_image = await self.get_restaurants_image("00", restaurant.id, db)
+        restaurant.image = restaurant_image[0] if restaurant_image else None
         if not restaurant:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -189,5 +186,14 @@ class RestaurantService:
         founded_restaurant = await self.restaurant_repository.get_restaurant_by_owner_id(user_id, db)
         new_table = await self.table_repository.create_table(founded_restaurant.id, db)
         return new_table
+
+    async def delete_table(self, table_id: int, payload: dict, db: AsyncSession):
+        user_role = payload.get("role")
+        if user_role not in UserRole.ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You dont have permission to this action"
+            )
+        await self.table_repository.delete_table(table_id, db)
 
 
