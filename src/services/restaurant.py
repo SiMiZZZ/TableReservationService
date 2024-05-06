@@ -10,7 +10,7 @@ from schemas.restaurant import RestaurantCreate, RestaurantInfo, CreatedRestaura
     RestaurantUpdate
 from schemas.user import UserCreate, NewUserReturn
 from schemas.restaurant import RestaurantImageCreate
-from schemas.table import TableInfo
+from schemas.table import TableInfo, TableCreate
 from auth.utils import *
 from models.user import UserRole
 from consts import restaurant_tags
@@ -174,7 +174,7 @@ class RestaurantService:
 
         return return_lst
 
-    async def create_table(self, payload: dict, db: AsyncSession) -> TableInfo:
+    async def create_table(self, table: TableCreate, payload: dict, db: AsyncSession) -> TableInfo:
         user_role = payload.get("role")
         if user_role not in UserRole.ADMIN:
             raise HTTPException(
@@ -184,7 +184,7 @@ class RestaurantService:
 
         user_id = payload.get("id")
         founded_restaurant = await self.restaurant_repository.get_restaurant_by_owner_id(user_id, db)
-        new_table = await self.table_repository.create_table(founded_restaurant.id, db)
+        new_table = await self.table_repository.create_table(table, founded_restaurant.id, db)
         return new_table
 
     async def delete_table(self, table_id: int, payload: dict, db: AsyncSession):
