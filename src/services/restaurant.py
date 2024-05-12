@@ -67,7 +67,7 @@ class RestaurantService:
             restaurant.image = restaurant_image[0] if restaurant_image else None
         return restaurants
 
-    async def get_restaurant_by_id(self, user_role, restaurant_id: int, db: AsyncSession) -> RestaurantInfo:
+    async def get_restaurant_by_id(self, restaurant_id: int, db: AsyncSession) -> RestaurantInfo:
 
         restaurant = await self.restaurant_repository.get_restaurant_by_id_or_none(restaurant_id, db)
         restaurant_image = await self.get_restaurants_image("00", restaurant.id, db)

@@ -47,5 +47,4 @@ async def get_restaurant_by_id(restaurant_id: int,
     """
     Получение информации о ресторане по его id
     """
-    role = payload.get("role")
     return await restaurant_service.get_restaurant_by_id(role, restaurant_id, db)
