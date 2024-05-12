@@ -83,13 +83,13 @@ async def get_imgages():
     return os.getcwd() + "/media/1/Фаербол.png"
 
 
-@router.post("/restaurants/tables", response_model=List[TableInfo])
+@router.post("/restaurants/tables")
 async def create_table(table: TablesCreate,
                        db: AsyncSession = Depends(get_db),
                        payload: dict = Depends(get_current_token_payload)):
     data = await restaurant_service.create_table(table, payload, db)
-    print(data)
-    return data
+    # print(data[0].id, data[0].restaurant_id)
+    return True
 
 
 @router.delete("/restaurants/tables/{table_id}")
