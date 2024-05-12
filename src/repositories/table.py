@@ -16,7 +16,7 @@ class TableRepository:
 
     async def create_table(self, table: TableCreate,
                            restaurant_id: int,
-                           db: AsyncSession) -> RestaurantModel:
+                           db: AsyncSession) -> TableModel:
         table = TableModel(restaurant_id=restaurant_id, **table.dict())
         db.add(table)
         await db.commit()

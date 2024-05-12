@@ -87,7 +87,9 @@ async def get_imgages():
 async def create_table(table: TablesCreate,
                        db: AsyncSession = Depends(get_db),
                        payload: dict = Depends(get_current_token_payload)):
-    return await restaurant_service.create_table(table, payload, db)
+    data = await restaurant_service.create_table(table, payload, db)
+    print(data)
+    return data
 
 
 @router.delete("/restaurants/tables/{table_id}")
