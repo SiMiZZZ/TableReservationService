@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse
 
 from schemas.restaurant import (RestaurantInfo, RestaurantCreate, RestaurantCreateFromAPI,
                                 CreatedRestaurant, RestaurantUpdate)
-from schemas.table import TableInfo, TableCreate
+from schemas.table import TableInfo, TablesCreate
 from schemas.user import NewUserReturn, UserCreate
 from services.database import get_db
 from services.restaurant import RestaurantService
@@ -83,8 +83,8 @@ async def get_imgages():
     return os.getcwd() + "/media/1/Фаербол.png"
 
 
-@router.post("/restaurants/tables", response_model=TableInfo)
-async def create_table(table: TableCreate,
+@router.post("/restaurants/tables", response_model=List[TableInfo])
+async def create_table(table: TablesCreate,
                        db: AsyncSession = Depends(get_db),
                        payload: dict = Depends(get_current_token_payload)):
     return await restaurant_service.create_table(table, payload, db)

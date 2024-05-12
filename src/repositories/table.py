@@ -9,7 +9,7 @@ from models.restautant import Restaurant as RestaurantModel
 from models.table import Table as TableModel
 from models.table import Table
 from models.restaurant_image import RestaurantImage
-from schemas.table import TableCreate
+from schemas.table import TablesCreate, TableCreate
 
 
 class TableRepository:
