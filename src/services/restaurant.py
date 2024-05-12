@@ -185,9 +185,10 @@ class RestaurantService:
         user_id = payload.get("id")
         founded_restaurant = await self.restaurant_repository.get_restaurant_by_owner_id(user_id, db)
         return_tables = []
+        id = founded_restaurant.id
         for _ in range(tables.tables_count):
             table_info = TableCreate(people_count=tables.people_count, tags=tables.tags)
-            new_table = await self.table_repository.create_table(table_info, founded_restaurant.id, db)
+            new_table = await self.table_repository.create_table(table_info, id, db)
             return_tables.append(new_table)
         return return_tables
 
