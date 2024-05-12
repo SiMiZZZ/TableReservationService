@@ -43,7 +43,6 @@ async def get_all_restaurants(db: AsyncSession = Depends(get_db)):
 
 @router.get("/restaurants/{restaurant_id}", response_model=RestaurantInfo)
 async def get_restaurant_by_id(restaurant_id: int,
-                               payload: dict = Depends(get_current_token_payload),
                                db: AsyncSession = Depends(get_db)):
     """
     Получение информации о ресторане по его id
