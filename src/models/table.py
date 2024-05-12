@@ -22,4 +22,5 @@ class Table(Base):
     restaurant_id = Column(Integer, ForeignKey("restaurants.id"))
     restaurant = relationship("Restaurant", back_populates="tables")
     tags = Column(ARRAY(String), nullable=True, default=[])
+    people_count = Column(Integer, default=2)
 

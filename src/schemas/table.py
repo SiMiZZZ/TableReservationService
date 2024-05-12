@@ -7,3 +7,7 @@ class TableInfo(BaseModel):
     id: int
     restaurant_id: int
     tags: List[str]
+
+class TableCreate(BaseModel):
+    people_count: int
+    tags: List[str]

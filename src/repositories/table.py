@@ -9,14 +9,15 @@ from models.restautant import Restaurant as RestaurantModel
 from models.table import Table as TableModel
 from models.table import Table
 from models.restaurant_image import RestaurantImage
-from schemas.restaurant import RestaurantCreate, RestaurantUpdate, CreatedRestaurant, RestaurantImageCreate
+from schemas.table import TableCreate
 
 
 class TableRepository:
 
-    async def create_table(self, restaurant_id: int,
-                                db: AsyncSession) -> RestaurantModel:
-        table = TableModel(restaurant_id=restaurant_id)
+    async def create_table(self, table: TableCreate,
+                           restaurant_id: int,
+                           db: AsyncSession) -> RestaurantModel:
+        table = TableModel(restaurant_id=restaurant_id, **table.dict())
         db.add(table)
         await db.commit()
         await db.refresh(table)

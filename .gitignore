@@ -1,3 +1,4 @@
 /src/.venv.dev/
 /.venv/
 /pg_data/
+/src/certs/
