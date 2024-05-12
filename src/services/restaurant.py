@@ -188,7 +188,7 @@ class RestaurantService:
         for _ in range(tables.tables_count):
             table_info = TableCreate(people_count=tables.people_count, tags=tables.tags)
             new_table = await self.table_repository.create_table(table_info, founded_restaurant.id, db)
-            tables.append(new_table)
+            return_tables.append(new_table)
         return return_tables
 
     async def delete_table(self, table_id: int, payload: dict, db: AsyncSession):
