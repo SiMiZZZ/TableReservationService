@@ -4,13 +4,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import schemas
 
 from schemas.user import UserAuthData, UserAuthReturn, UserData, UserRegisteredData
+from schemas.booking import BookingCreate, BookingInfo
 from services.database import get_db
 from services.user import UserService
+from services.restaurant import RestaurantService
 from auth.utils import *
 
 router = APIRouter(prefix="/client", tags=["client"])
 
 auth_service = UserService()
+restaurant_service = RestaurantService()
 
 http_bearer = HTTPBearer()
 
@@ -42,4 +45,11 @@ async def get_authorised_user_information(
     """
     return await auth_service.get_user_by_id(user_id, db)
 
+
+@router.post("/restaurants/tables/{table_id}/booking", response_model=BookingInfo)
+async def create_booking(booking: BookingCreate,
+                         table_id: int,
+                         user_id: int = Depends(get_current_user_id),
+                         db: AsyncSession = Depends(get_db)):
+    return await restaurant_service.create_booking(booking, user_id, table_id, db)
 

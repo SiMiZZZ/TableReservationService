@@ -22,9 +22,9 @@ class DatabaseSessionManager:
         import sqlalchemy
         RDS_CERT_PATH = settings.CERT_PATH
 
-        ssl_context = ssl.create_default_context(cafile=RDS_CERT_PATH)
-        ssl_context.verify_mode = ssl.CERT_REQUIRED
-        connect_args = {"ssl": ssl_context}
+        # ssl_context = ssl.create_default_context(cafile=RDS_CERT_PATH)
+        # ssl_context.verify_mode = ssl.CERT_REQUIRED
+        # connect_args = {"ssl": ssl_context}
         # yandex postgres
         # self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool, connect_args=connect_args)
 

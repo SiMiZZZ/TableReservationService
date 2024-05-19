@@ -7,11 +7,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from repositories.user import UserRepository
 from repositories.restaurant import RestaurantRepository
 from repositories.table import TableRepository
+from repositories.booking import BookingRepository
 from schemas.restaurant import RestaurantCreate, RestaurantInfo, CreatedRestaurant, RestaurantCreateFromAPI, \
     RestaurantUpdate
 from schemas.user import UserCreate, NewUserReturn
 from schemas.restaurant import RestaurantImageCreate
 from schemas.table import TableInfo, TablesCreate, TableCreate
+from schemas.booking import BookingInfo, BookingCreate
 from auth.utils import *
 from models.user import UserRole
 from consts import restaurant_tags
@@ -20,6 +22,8 @@ from config import settings
 import os
 import boto3
 import hashlib
+import datetime
+from dateutil import parser
 from .database import sessionmanager
 
 
@@ -28,6 +32,7 @@ class RestaurantService:
         self.restaurant_repository = RestaurantRepository()
         self.user_repository = UserRepository()
         self.table_repository = TableRepository()
+        self.booking_repository = BookingRepository()
 
     async def create_restaurant(self, user_role: str,
                                 restaurant: RestaurantCreateFromAPI, db: AsyncSession) -> CreatedRestaurant:
@@ -152,7 +157,7 @@ class RestaurantService:
             )
         return restaurant_tags.tags
 
-    async def create_restaurant_image(self, files: List[File], restaurant_id: int,  db: AsyncSession):
+    async def create_restaurant_image(self, files: List[File], restaurant_id: int, db: AsyncSession):
 
         session = boto3.session.Session()
         s3 = session.client(
@@ -169,7 +174,8 @@ class RestaurantService:
             with temp as f:
                 f.write(contents)
 
-            file_name = hashlib.sha1(f"{file.filename}_{restaurant_id}".encode()).hexdigest() +  "." + file.filename.split(".")[-1]
+            file_name = hashlib.sha1(f"{file.filename}_{restaurant_id}".encode()).hexdigest() + "." + \
+                        file.filename.split(".")[-1]
 
             s3.upload_file(temp.name, settings.BUCKET_NAME, file_name)
             await self.restaurant_repository.create_restaurant_image(RestaurantImageCreate(
@@ -178,7 +184,6 @@ class RestaurantService:
                 restaurant_id=restaurant_id),
                 db
             )
-
 
     async def get_restaurants_image(self, host, restaurant_id: int, db: AsyncSession):
 
@@ -213,4 +218,9 @@ class RestaurantService:
             )
         await self.table_repository.delete_table(table_id, db)
 
+    async def create_booking(self, booking: BookingCreate, user_id: int, table_id: int, db: AsyncSession) -> BookingInfo:
+        duration = booking.duration
+        time_to = booking.time_from + timedelta(minutes=duration)
 
+        booking_entity = await self.booking_repository.create_booking(booking, table_id, user_id, db, time_to=time_to)
+        return booking_entity
