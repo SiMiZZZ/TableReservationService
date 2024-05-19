@@ -13,6 +13,11 @@ class UserAuthData(BaseModel):
     email: EmailStr
     password: str
 
+class UserRegisteredData(BaseModel):
+    email: EmailStr
+    password: str
+    name: str
+
 class UserData(BaseModel):
     email: EmailStr
     role: str

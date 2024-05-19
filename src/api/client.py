@@ -3,7 +3,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import schemas
 
-from schemas.user import UserAuthData, UserAuthReturn, UserData
+from schemas.user import UserAuthData, UserAuthReturn, UserData, UserRegisteredData
 from services.database import get_db
 from services.user import UserService
 from auth.utils import *
@@ -15,7 +15,7 @@ auth_service = UserService()
 http_bearer = HTTPBearer()
 
 @router.post("/auth/register", response_model=UserAuthReturn)
-async def register_client_user(user: UserAuthData, db: AsyncSession = Depends(get_db)) -> UserAuthReturn:
+async def register_client_user(user: UserRegisteredData, db: AsyncSession = Depends(get_db)) -> UserAuthReturn:
     """
     Регистрация клиента
     """
