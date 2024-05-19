@@ -5,6 +5,7 @@ services:
     restart: always
     volumes:
       - /home/simizzz/media/:/app/src/media/
+      - /home/simizzz/.postgresql/root.crt:/app/src/root.crt
     env_file:
       - .env
     build: ./

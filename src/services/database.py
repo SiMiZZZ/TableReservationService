@@ -24,7 +24,6 @@ class DatabaseSessionManager:
 
         ssl_context = ssl.create_default_context(cafile=RDS_CERT_PATH)
         ssl_context.verify_mode = ssl.CERT_REQUIRED
-
         connect_args = {"ssl": ssl_context}
         self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool, connect_args=connect_args)
         self._sessionmaker = async_sessionmaker(autocommit=False, bind=self._engine)
