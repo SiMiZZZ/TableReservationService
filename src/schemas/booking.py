@@ -20,6 +20,7 @@ class BookingCreate(BaseModel):
     comment: str
 
 
-class TableExistsByTag(BaseModel):
+class TableExistsByData(BaseModel):
     tags: List[str]
+    people_count: int
 

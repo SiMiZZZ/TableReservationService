@@ -29,3 +29,10 @@ class BookingRepository:
         q = delete(BookingModel).where(BookingModel.id == booking_id)
         await db.execute(q)
         await db.commit()
+
+    async def get_bookings_by_restaurant(self, restaurant_id: int, db: AsyncSession):
+        q = select(BookingModel).where(BookingModel.restaurant_id == restaurant_id).options(
+            selectinload(BookingModel.table)).options(selectinload(BookingModel.user))
+        exec = await db.execute(q)
+        bookings = exec.scalars()
+        return bookings

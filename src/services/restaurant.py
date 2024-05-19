@@ -13,7 +13,7 @@ from schemas.restaurant import RestaurantCreate, RestaurantInfo, CreatedRestaura
 from schemas.user import UserCreate, NewUserReturn
 from schemas.restaurant import RestaurantImageCreate
 from schemas.table import TableInfo, TablesCreate, TableCreate
-from schemas.booking import BookingInfo, BookingCreate
+from schemas.booking import BookingInfo, BookingCreate, TableExistsByData
 from auth.utils import *
 from models.user import UserRole
 from consts import restaurant_tags
@@ -237,7 +237,7 @@ class RestaurantService:
         return list(set(all_tags))
 
 
-    async def check_existing_restaurant_with_tag_combination(self, tags: List[str],
+    async def check_existing_restaurant_with_tag_combination(self, data: TableExistsByData,
                                                              restaurant_id: int,
                                                              db: AsyncSession):
         restaurant = await self.restaurant_repository.get_restaurant_by_id_or_none(restaurant_id, db)
@@ -246,13 +246,28 @@ class RestaurantService:
         good_tables = []
         for table in restaurant.tables:
             full_match = True
-            for tag in tags:
+            for tag in data.tags:
                 if tag not in table.tags:
                     full_match = False
                     break
-            if full_match:
+            if full_match and data.people_count >= table.people_count:
                 good_tables.append(table.id)
         if not good_tables:
             raise HTTPException(status_code=400, detail="No tables with this tags")
 
         return good_tables
+
+    async def get_all_bookings(self, payload: dict, db: AsyncSession) -> List[BookingInfo]:
+        user_role = payload.get("role")
+        if user_role not in UserRole.ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You dont have permission to this action"
+            )
+
+        user_id = payload.get("id")
+        founded_restaurant = await self.restaurant_repository.get_restaurant_by_owner_id(user_id, db)
+        if not founded_restaurant:
+            raise HTTPException(status_code=404, detail="Restaurant not found")
+        bookings = await self.booking_repository.get_bookings_by_restaurant(founded_restaurant.id, db)
+        return bookings

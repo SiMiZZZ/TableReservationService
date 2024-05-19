@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import schemas
 
 from schemas.user import UserAuthData, UserAuthReturn, UserData, UserRegisteredData
-from schemas.booking import BookingCreate, BookingInfo, TableExistsByTag
+from schemas.booking import BookingCreate, BookingInfo, TableExistsByData
 from services.database import get_db
 from services.user import UserService
 from services.restaurant import RestaurantService
@@ -60,8 +60,8 @@ async def get_all_restaurants_tags(restaurant_id: int,
     return await restaurant_service.get_all_restaurant_tags(restaurant_id, db)
 
 @router.post("/restaurants/{restaurant_id}/tables/exist")
-async def check_exists_table_of_tags(tags_exists: TableExistsByTag,
+async def check_exists_table_of_tags(table_exists: TableExistsByData,
                                      restaurant_id: int,
                                      db: AsyncSession = Depends(get_db)):
-    return await restaurant_service.check_existing_restaurant_with_tag_combination(tags_exists.tags, restaurant_id, db)
+    return await restaurant_service.check_existing_restaurant_with_tag_combination(table_exists, restaurant_id, db)
 
