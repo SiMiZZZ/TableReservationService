@@ -16,11 +16,24 @@ from services.restaurant import RestaurantService
 from auth.utils import *
 from config import settings
 
+import os
+import boto3
+import logging
+
+from botocore.client import BaseClient
+from botocore.exceptions import ClientError
+from fastapi_storages import S3Storage
+
+
+
 router = APIRouter(prefix="/media", tags=["media"])
 
 restaurant_service = RestaurantService()
 
+
+
 @router.get("/{id}/{name}", response_class=FileResponse)
 async def get_imgages(id: int, name: str):
     return settings.MEDIA_ROOT + f"/{id}/{name}"
+
 

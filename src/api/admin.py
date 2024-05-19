@@ -1,4 +1,5 @@
 import os
+from tempfile import NamedTemporaryFile
 from typing import List
 
 from fastapi import APIRouter, Depends, UploadFile, File, Response
@@ -71,9 +72,11 @@ async def get_all_tags(payload: dict = Depends(get_current_token_payload)):
 @router.post("/restaurants/{restaurant_id}/images")
 async def upload_restaurant_image(restaurant_id: int,
                                   files: List[UploadFile] = File(...),
-                                  db: AsyncSession = Depends(get_db),
-                                  payload: dict = Depends(get_current_token_payload)):
+                                  db: AsyncSession = Depends(get_db)
+                                 ): #  payload: dict = Depends(get_current_token_payload)
     # await restaurant_service.create_restaurant_image(files, restaurant_id, db)
+
+
     return await restaurant_service.create_restaurant_image(files, restaurant_id, db)
 
 

@@ -25,5 +25,6 @@ class Settings:
     ACCESS_TOKEN_EXPIRE_MINUTES: int = env("ACCESS_TOKEN_EXPIRE_MINUTES")
 
     MEDIA_ROOT: str = env("MEDIA_ROOT")
+    BUCKET_NAME: str = env("BUCKET_NAME")
 
 settings = Settings

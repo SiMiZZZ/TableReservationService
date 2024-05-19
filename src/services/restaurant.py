@@ -1,3 +1,4 @@
+from tempfile import NamedTemporaryFile
 from typing import List
 
 from fastapi import HTTPException
@@ -17,6 +18,8 @@ from consts import restaurant_tags
 from fastapi import File
 from config import settings
 import os
+import boto3
+import hashlib
 from .database import sessionmanager
 
 
@@ -150,28 +153,35 @@ class RestaurantService:
         return restaurant_tags.tags
 
     async def create_restaurant_image(self, files: List[File], restaurant_id: int,  db: AsyncSession):
+
+        session = boto3.session.Session()
+        s3 = session.client(
+            service_name='s3',
+            endpoint_url='https://storage.yandexcloud.net'
+        )
+
         media_root = settings.MEDIA_ROOT + f"{restaurant_id}/"
         for file in files:
-            contents = file.file.read()
-            os.makedirs(os.path.dirname(media_root + file.filename), exist_ok=True)
-            with open(media_root + file.filename, "wb+") as f:
+            temp = NamedTemporaryFile(delete=False)
+            contents = files[0].file.read()
+            with temp as f:
                 f.write(contents)
-                await self.restaurant_repository.create_restaurant_image(RestaurantImageCreate(
-                    path=media_root + file.filename,
-                    name=file.filename,
-                    restaurant_id=restaurant_id),
-                    db)
-                f.close()
+
+            file_name = hashlib.sha1(f"{file.filename}_{restaurant_id}".encode()).hexdigest() +  "." + file.filename.split(".")[-1]
+
+            s3.upload_file(temp.name, settings.BUCKET_NAME, file_name)
+            await self.restaurant_repository.create_restaurant_image(RestaurantImageCreate(
+                path=f"https://project-bucket-1.storage.yandexcloud.net/{file_name}",
+                name=file_name,
+                restaurant_id=restaurant_id),
+                db
+            )
+
 
     async def get_restaurants_image(self, host, restaurant_id: int, db: AsyncSession):
 
         images = await self.restaurant_repository.get_images_by_restaurants(restaurant_id, db)
-        return_lst = []
-        for image in images:
-            return_lst.append(
-                f"https://85.10.216.104/api/media/{restaurant_id}/{image.name}"
-            )
-
+        return_lst = list(map(lambda image: image.path, images))
         return return_lst
 
     async def create_table(self, tables: TablesCreate, payload: dict, db: AsyncSession) -> List[TableInfo]:
