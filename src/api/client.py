@@ -53,3 +53,9 @@ async def create_booking(booking: BookingCreate,
                          db: AsyncSession = Depends(get_db)):
     return await restaurant_service.create_booking(booking, user_id, table_id, db)
 
+
+@router.get("/restaurants/{restaurant_id}/tags")
+async def get_all_restaurants_tags(restaurant_id: int,
+                         db: AsyncSession = Depends(get_db)):
+    return await restaurant_service.get_all_restaurant_tags(restaurant_id, db)
+

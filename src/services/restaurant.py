@@ -224,3 +224,14 @@ class RestaurantService:
 
         booking_entity = await self.booking_repository.create_booking(booking, table_id, user_id, db, time_to=time_to)
         return booking_entity
+
+    async def get_all_restaurant_tags(self, restaurant_id: int, db: AsyncSession):
+        restaurant = await self.restaurant_repository.get_restaurant_by_id_or_none(restaurant_id, db)
+        if restaurant is None:
+            raise HTTPException(status_code=404, detail="No restaurant with this id")
+        tables = restaurant.tables
+        all_tags = []
+        for table in tables:
+            all_tags.extend(table.tags)
+
+        return list(set(all_tags))
