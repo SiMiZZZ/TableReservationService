@@ -32,6 +32,7 @@ services:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
+    user: root
 
 volumes:
   prometheus_data:
