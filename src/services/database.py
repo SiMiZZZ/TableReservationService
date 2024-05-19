@@ -29,7 +29,7 @@ class DatabaseSessionManager:
         # self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool, connect_args=connect_args)
 
         # cluster postgres
-        self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool, connect_args=connect_args)
+        self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool)
         self._sessionmaker = async_sessionmaker(autocommit=False, bind=self._engine)
 
     async def close(self):
