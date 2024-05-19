@@ -1,5 +1,6 @@
 import contextlib
 from typing import AsyncIterator
+import ssl
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import (AsyncConnection, AsyncEngine, AsyncSession,
@@ -19,7 +20,13 @@ class DatabaseSessionManager:
 
     def init(self, host: str):
         import sqlalchemy
-        self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool)
+        RDS_CERT_PATH = settings.CERT_PATH
+
+        ssl_context = ssl.create_default_context(cafile=RDS_CERT_PATH)
+        ssl_context.verify_mode = ssl.CERT_REQUIRED
+
+        connect_args = {"ssl": ssl_context}
+        self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool, connect_args=connect_args)
         self._sessionmaker = async_sessionmaker(autocommit=False, bind=self._engine)
 
     async def close(self):
@@ -65,6 +72,7 @@ class DatabaseSessionManager:
 
 sessionmanager = DatabaseSessionManager()
 sessionmanager.init(settings.DB_CONFIG)
+
 
 async def get_db():
     async with sessionmanager.session() as session:

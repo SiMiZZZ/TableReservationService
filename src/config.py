@@ -17,6 +17,7 @@ class Settings:
             DB_NAME=env("DATABASE_NAME"),
         ),
     )
+    CERT_PATH = env("CERT_PATH")
     PRIVATE_KEY_PATH: Path = Path(BASE_DIR / "src" / "certs" / "private.pem")
     PUBLIC_KEY_PATH: Path = Path(BASE_DIR / "src" / "certs" / "public.pem")
 
