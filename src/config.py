@@ -26,5 +26,7 @@ class Settings:
 
     MEDIA_ROOT: str = env("MEDIA_ROOT")
     BUCKET_NAME: str = env("BUCKET_NAME")
+    AWS_ACCESS_TOKEN: str = env("AWS_ACCESS_TOKEN")
+    AWS_SECRET_KEY: str = env("AWS_SECRET_KEY")
 
 settings = Settings

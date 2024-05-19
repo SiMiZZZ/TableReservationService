@@ -157,7 +157,9 @@ class RestaurantService:
         session = boto3.session.Session()
         s3 = session.client(
             service_name='s3',
-            endpoint_url='https://storage.yandexcloud.net'
+            endpoint_url='https://storage.yandexcloud.net',
+            aws_access_key_id=settings.AWS_ACCESS_TOKEN,
+            aws_secret_access_key=settings.AWS_SECRET_KEY,
         )
 
         media_root = settings.MEDIA_ROOT + f"{restaurant_id}/"
