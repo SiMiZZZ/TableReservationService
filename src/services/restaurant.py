@@ -220,7 +220,8 @@ class RestaurantService:
 
     async def create_booking(self, booking: BookingCreate, user_id: int, table_id: int, db: AsyncSession) -> BookingInfo:
         duration = booking.duration
-        time_to = booking.time_from + timedelta(minutes=duration)
+        time_to = (booking.time_from + timedelta(minutes=duration)).replace(tzinfo=None)
+        booking.time_from = booking.time_from.replace(tzinfo=None)
 
         booking_entity = await self.booking_repository.create_booking(booking, table_id, user_id, db, time_to=time_to)
         return booking_entity
