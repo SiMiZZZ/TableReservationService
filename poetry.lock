@@ -389,6 +389,29 @@ typing = ["typing-extensions"]
 xmp = ["defusedxml"]
 
 [[package]]
+name = "prometheus-client"
+version = "0.20.0"
+description = "Python client for the Prometheus monitoring system."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.extras]
+twisted = ["twisted"]
+
+[[package]]
+name = "prometheus-fastapi-instrumentator"
+version = "7.0.0"
+description = "Instrument your FastAPI with Prometheus metrics."
+category = "main"
+optional = false
+python-versions = ">=3.8.1,<4.0.0"
+
+[package.dependencies]
+prometheus-client = ">=0.8.0,<1.0.0"
+starlette = ">=0.30.0,<1.0.0"
+
+[[package]]
 name = "psutil"
 version = "5.9.8"
 description = "Cross-platform lib for process and system monitoring in Python."
@@ -627,7 +650,7 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "47665b0ff3e8d2724cb40e01f4dea70ff98ea6de1d9b386caece939dd977ad7c"
+content-hash = "8ba5a87a0eca22612f6c0bb23240fd295da4597ec51f3292fafc0a5a0cbe5450"
 
 [metadata.files]
 alembic = []
@@ -660,6 +683,8 @@ marshmallow = []
 mypy-extensions = []
 packaging = []
 pillow = []
+prometheus-client = []
+prometheus-fastapi-instrumentator = []
 psutil = []
 psycopg2-binary = []
 pycparser = []
