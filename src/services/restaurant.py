@@ -250,7 +250,7 @@ class RestaurantService:
                 if tag not in table.tags:
                     full_match = False
                     break
-            if full_match and data.people_count >= table.people_count:
+            if full_match and table.people_count >= data.people_count:
                 good_tables.append(table.id)
         if not good_tables:
             raise HTTPException(status_code=400, detail="No tables with this tags")
