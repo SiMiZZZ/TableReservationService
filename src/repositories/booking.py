@@ -2,11 +2,12 @@ from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import selectinload, joinedload
 
 from models.user import User as UserModel
 from models.restautant import Restaurant as RestaurantModel
 from models.booking import Booking as BookingModel
+from models.table import Table as TableModel
 from models.restaurant_image import RestaurantImage
 from schemas.table import TablesCreate, TableCreate
 from schemas.booking import BookingCreate
@@ -31,8 +32,10 @@ class BookingRepository:
         await db.commit()
 
     async def get_bookings_by_restaurant(self, restaurant_id: int, db: AsyncSession):
-        q = select(BookingModel).where(BookingModel.restaurant_id == restaurant_id).options(
-            selectinload(BookingModel.table)).options(selectinload(BookingModel.user))
+        q = (select(BookingModel).join(TableModel).join(RestaurantModel)
+             .where(RestaurantModel.id == restaurant_id)
+             .options(selectinload(BookingModel.table))
+             .options(selectinload(BookingModel.user)))
         exec = await db.execute(q)
-        bookings = exec.scalars()
+        bookings = exec.scalars().all()
         return bookings
