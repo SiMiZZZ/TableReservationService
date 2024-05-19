@@ -20,3 +20,6 @@ class BookingCreate(BaseModel):
     comment: str
 
 
+class TableExistsByTag(BaseModel):
+    tags: List[str]
+

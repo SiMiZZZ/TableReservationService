@@ -52,9 +52,7 @@ class RestaurantRepository:
                                       db: AsyncSession) -> RestaurantImage:
         restaurant_image = RestaurantImage(**restaurant_image_schema.dict())
         db.add(restaurant_image)
-        print(restaurant_image)
         await db.commit()
-        print("###############################################")
         return restaurant_image
 
     async def get_images_by_restaurants(self, restaurant_id: int, db: AsyncSession) -> List[RestaurantImage]:

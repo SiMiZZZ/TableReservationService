@@ -235,3 +235,24 @@ class RestaurantService:
             all_tags.extend(table.tags)
 
         return list(set(all_tags))
+
+
+    async def check_existing_restaurant_with_tag_combination(self, tags: List[str],
+                                                             restaurant_id: int,
+                                                             db: AsyncSession):
+        restaurant = await self.restaurant_repository.get_restaurant_by_id_or_none(restaurant_id, db)
+        if restaurant is None:
+            raise HTTPException(status_code=404, detail="No restaurant with this id")
+        good_tables = []
+        for table in restaurant.tables:
+            full_match = True
+            for tag in tags:
+                if tag not in table.tags:
+                    full_match = False
+                    break
+            if full_match:
+                good_tables.append(table.id)
+        if not good_tables:
+            raise HTTPException(status_code=400, detail="No tables with this tags")
+
+        return good_tables
