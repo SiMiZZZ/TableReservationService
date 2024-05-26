@@ -26,7 +26,7 @@ class DatabaseSessionManager:
         # ssl_context.verify_mode = ssl.CERT_REQUIRED
         # connect_args = {"ssl": ssl_context}
         # yandex postgres
-        # self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool, connect_args=connect_args)
+        # self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool) #, connect_args=connect_args)
 
         # cluster postgres
         self._engine = create_async_engine(host, poolclass=sqlalchemy.NullPool)

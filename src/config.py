@@ -11,10 +11,10 @@ class Settings:
     DB_CONFIG = env(
         "DB_CONFIG",
         "postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}".format(
-            DB_USER=env("DATABASE_USER"),
-            DB_PASSWORD=env("DATABASE_PASS"),
-            DB_HOST=env("DATABASE_HOST"),
-            DB_NAME=env("DATABASE_NAME"),
+            DB_USER=env("DATABASE_USER", None),
+            DB_PASSWORD=env("DATABASE_PASS", None),
+            DB_HOST=env("DATABASE_HOST", None),
+            DB_NAME=env("DATABASE_NAME", None),
         ),
     )
     CERT_PATH = env("CERT_PATH")

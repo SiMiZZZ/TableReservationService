@@ -4,11 +4,10 @@ services:
   app:
     restart: always
     volumes:
-      - /home/simizzz/media/:/app/src/media/
       - /home/simizzz/.postgresql/root.crt:/app/src/root.crt
     env_file:
       - .env
-    build: ./
+    build: .
     command: bash -c "cd src && poetry run uvicorn app:app --host 0.0.0.0 --port 8000"
     ports:
       - "8000:8000"
@@ -24,6 +23,24 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
 
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    container_name: exporter
+    hostname: exporter
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points
+      - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+    ports:
+      - 9100:9100
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
 
   grafana:
     image: grafana/grafana
@@ -31,20 +48,20 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - grafana_data:/var/lib/grafana
+      - ./grafana_data:/var/lib/grafana
     user: root
 
-volumes:
-  prometheus_data:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ./prometheus_data
-  grafana_data:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ./grafana_data
+#volumes:
+#  prometheus_data:
+#    driver: local
+#    driver_opts:
+#      o: bind
+#      type: none
+#      device: ./prometheus_data
+#  grafana_data:
+#    driver: local
+#    driver_opts:
+#      o: bind
+#      type: none
+#      device: ./grafana_data
 
