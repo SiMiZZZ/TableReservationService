@@ -5,6 +5,8 @@ services:
     restart: always
     volumes:
       - /home/simizzz/.postgresql/root.crt:/app/src/root.crt
+      - /home/simizzz/infra/private.pem:/app/src/certs/private.pem
+      - /home/simizzz/infra/public.pem:/app/src/certs/public.pem
     env_file:
       - /home/simizzz/infra/.env
     build: .
