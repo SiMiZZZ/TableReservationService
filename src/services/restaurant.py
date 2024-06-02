@@ -13,12 +13,13 @@ from schemas.restaurant import RestaurantCreate, RestaurantInfo, CreatedRestaura
 from schemas.user import UserCreate, NewUserReturn
 from schemas.restaurant import RestaurantImageCreate
 from schemas.table import TableInfo, TablesCreate, TableCreate
-from schemas.booking import BookingInfo, BookingCreate, TableExistsByData
+from schemas.booking import BookingInfo, BookingCreate, TableExistsByData, BookingUpdate
 from auth.utils import *
 from models.user import UserRole
 from consts import restaurant_tags
 from fastapi import File
 from config import settings
+from scripts.booking import generate_available_slots
 import os
 import boto3
 import hashlib
@@ -272,3 +273,22 @@ class RestaurantService:
             raise HTTPException(status_code=404, detail="Restaurant not found")
         bookings = await self.booking_repository.get_bookings_by_restaurant(founded_restaurant.id, db)
         return bookings
+
+    async def get_table_schedule(self,
+                                 restaurant_id: int,
+                                 table_id: int,
+                                 date: datetime,
+                                 db: AsyncSession) -> list[tuple[datetime.time, datetime.time]]:
+        bookings_by_date = await self.booking_repository.get_bookings_by_date(date, db)
+        restaurant = await self.restaurant_repository.get_restaurant_by_id_or_none(restaurant_id, db)
+        slots = generate_available_slots(datetime.datetime.strptime(restaurant.open_from, "%H:%M").time(),
+                                         datetime.datetime.strptime(restaurant.open_to, "%H:%M").time(),
+                                         bookings_by_date)
+        return slots
+
+    async def update_booking(self,
+                             booking_id: int,
+                             booking: BookingUpdate,
+                             db: AsyncSession) -> BookingInfo:
+        booking_model = await self.booking_repository.get_booking_by_id(booking_id, db)
+        return await self.booking_repository.update_booking(booking_model, booking, db)

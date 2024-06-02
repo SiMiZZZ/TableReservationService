@@ -8,6 +8,7 @@ from api.media import router as media_router
 from api.all_roles import router as all_roles_router
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
+from typing import Optional
 
 sessionmanager.init(settings.DB_CONFIG)
 

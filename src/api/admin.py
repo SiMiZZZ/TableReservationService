@@ -9,13 +9,16 @@ from starlette import schemas
 from starlette.responses import FileResponse
 from fastapi.responses import FileResponse
 
+from models import Booking
 from schemas.restaurant import (RestaurantInfo, RestaurantCreate, RestaurantCreateFromAPI,
                                 CreatedRestaurant, RestaurantUpdate)
 from schemas.table import TableInfo, TablesCreate
 from schemas.user import NewUserReturn, UserCreate
+from schemas.booking import BookingUpdate, BookingInfo
 from services.database import get_db
 from services.restaurant import RestaurantService
 from auth.utils import *
+from typing import Optional
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -106,3 +109,10 @@ async def delete_table(table_id: int,
 async def get_all_bookings(db: AsyncSession = Depends(get_db),
                        payload: dict = Depends(get_current_token_payload)):
     return await restaurant_service.get_all_bookings(payload, db)
+
+
+@router.patch("/restaurants/bookings/{booking_id}", response_model=BookingInfo)
+async def update_booking(booking_id: int,
+                         booking: BookingUpdate,
+                         db: AsyncSession = Depends(get_db)):
+    return await restaurant_service.update_booking(booking_id, booking, db)

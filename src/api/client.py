@@ -1,3 +1,7 @@
+import datetime
+from datetime import time
+from typing import List
+
 from fastapi import APIRouter, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -64,4 +68,9 @@ async def check_exists_table_of_tags(table_exists: TableExistsByData,
                                      restaurant_id: int,
                                      db: AsyncSession = Depends(get_db)):
     return await restaurant_service.check_existing_restaurant_with_tag_combination(table_exists, restaurant_id, db)
+
+
+@router.get("/restaurants/{restaurant_id}/tables/{table_id}/schedule", response_model=List[time])
+async def get_schedule(restaurant_id: int, table_id: int, date: datetime = datetime.now(), db: AsyncSession = Depends(get_db)):
+    return await restaurant_service.get_table_schedule(restaurant_id, table_id, date, db)
 

@@ -29,5 +29,5 @@ class Booking(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship(User, lazy="selectin")
     duration = Column(Integer)
-
+    status = Column(String, default="await_confirm")
 
