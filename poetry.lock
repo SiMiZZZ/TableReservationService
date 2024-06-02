@@ -109,6 +109,14 @@ urllib3 = {version = ">=1.25.4,<2.2.0 || >2.2.0,<3", markers = "python_version >
 crt = ["awscrt (==0.20.9)"]
 
 [[package]]
+name = "certifi"
+version = "2024.2.2"
+description = "Python package for providing Mozilla's CA Bundle."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "cffi"
 version = "1.16.0"
 description = "Foreign Function Interface for Python calling C code."
@@ -118,6 +126,14 @@ python-versions = ">=3.8"
 
 [package.dependencies]
 pycparser = "*"
+
+[[package]]
+name = "charset-normalizer"
+version = "3.3.2"
+description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
+category = "main"
+optional = false
+python-versions = ">=3.7.0"
 
 [[package]]
 name = "click"
@@ -517,6 +533,24 @@ python-versions = ">=3.8"
 dev = ["atomicwrites (==1.4.1)", "attrs (==23.2.0)", "coverage (==7.4.1)", "hatch", "invoke (==2.2.0)", "more-itertools (==10.2.0)", "pbr (==6.0.0)", "pluggy (==1.4.0)", "py (==1.11.0)", "pytest-cov (==4.1.0)", "pytest-timeout (==2.2.0)", "pytest (==8.0.0)", "pyyaml (==6.0.1)", "ruff (==0.2.1)"]
 
 [[package]]
+name = "requests"
+version = "2.32.2"
+description = "Python HTTP for Humans."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+certifi = ">=2017.4.17"
+charset-normalizer = ">=2,<4"
+idna = ">=2.5,<4"
+urllib3 = ">=1.21.1,<3"
+
+[package.extras]
+socks = ["PySocks (>=1.5.6,!=1.5.7)"]
+use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
+
+[[package]]
 name = "s3transfer"
 version = "0.10.1"
 description = "An Amazon S3 Transfer Manager"
@@ -650,7 +684,7 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "8ba5a87a0eca22612f6c0bb23240fd295da4597ec51f3292fafc0a5a0cbe5450"
+content-hash = "0a272bfe86598ebbe5adb718a8eb8dd0b2be4d29ff0bd09503febd5d49422d9b"
 
 [metadata.files]
 alembic = []
@@ -661,7 +695,9 @@ asyncpg = []
 bcrypt = []
 boto3 = []
 botocore = []
+certifi = []
 cffi = []
+charset-normalizer = []
 click = []
 colorama = []
 cryptography = []
@@ -694,6 +730,7 @@ pyjwt = []
 python-dateutil = []
 python-dotenv = []
 python-multipart = []
+requests = []
 s3transfer = []
 six = []
 sniffio = []
