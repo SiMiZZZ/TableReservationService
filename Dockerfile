@@ -11,3 +11,5 @@ COPY . .
 
 RUN poetry config virtualenvs.create false --local
 RUN poetry install
+
+
