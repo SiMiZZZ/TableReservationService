@@ -54,6 +54,7 @@ class BookingRepository:
         stmt = select(BookingModel).where(
             func.date(BookingModel.time_from) == date.date()
         )
+
         result = await db.execute(stmt)
         bookings = result.scalars().all()
         return bookings
