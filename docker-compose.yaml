@@ -53,18 +53,9 @@ services:
       - ./grafana_data:/var/lib/grafana
     user: root
 
-
-#volumes:
-#  prometheus_data:
-#    driver: local
-#    driver_opts:
-#      o: bind
-#      type: none
-#      device: ./prometheus_data
-#  grafana_data:
-#    driver: local
-#    driver_opts:
-#      o: bind
-#      type: none
-#      device: ./grafana_data
-
+  redis:
+      image: redis
+      container_name: redis
+      ports:
+        - "6379:6379"
+      restart: always
