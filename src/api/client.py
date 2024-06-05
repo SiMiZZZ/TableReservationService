@@ -77,7 +77,10 @@ async def check_exists_table_of_tags(table_exists: TableExistsByData,
 
 
 @router.get("/restaurants/{restaurant_id}/tables/{table_id}/schedule", response_model=List[time])
-async def get_schedule(restaurant_id: int, table_id: int, date: datetime = datetime.now(), db: AsyncSession = Depends(get_db)):
+async def get_schedule(restaurant_id: int,
+                       table_id: int,
+                       date: datetime = datetime.now(),
+                       db: AsyncSession = Depends(get_db)):
     return await restaurant_service.get_table_schedule(restaurant_id, table_id, date, db)
 
 

@@ -83,12 +83,6 @@ async def upload_restaurant_image(restaurant_id: int,
     return await restaurant_service.create_restaurant_image(files, restaurant_id, db)
 
 
-@router.get("/restaurants/{restaurant_id}/imgages", response_class=FileResponse)
-async def get_imgages():
-    print(os.getcwd() + "/media/1/Фаербол.png")
-    return os.getcwd() + "/media/1/Фаербол.png"
-
-
 @router.post("/restaurants/tables")
 async def create_table(table: TablesCreate,
                        db: AsyncSession = Depends(get_db),

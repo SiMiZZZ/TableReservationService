@@ -10,6 +10,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 from typing import Optional
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from fastapi_cache.decorator import cache
+
+from redis import asyncio as aioredis
+
 sessionmanager.init(settings.DB_CONFIG)
 
 app = FastAPI(title="Restaurant Table Reservation Server")
@@ -34,5 +45,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    redis = aioredis.from_url("redis://redis")
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    yield
 
 Instrumentator().instrument(app).expose(app)
