@@ -7,7 +7,7 @@ class StatusEnum(str, Enum):
     AWAIT_CONFIRM = "await_confirm"
     CONFIRMED = "confirmed"
     REJECTED = "rejected"
-
+    COMPLETED = "completed"
 
 class BookingInfo(BaseModel):
     id: int

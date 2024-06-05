@@ -54,6 +54,7 @@ class BookingRepository:
         stmt = select(BookingModel).where(
             func.date(BookingModel.time_from) == date.date()
         )
+
         result = await db.execute(stmt)
         bookings = result.scalars().all()
         return bookings
@@ -67,3 +68,11 @@ class BookingRepository:
         await db.commit()
         await db.refresh(booking_model)
         return booking_model
+
+    async def get_bookings_by_user(self, user_id: int, db: AsyncSession):
+        q = (select(BookingModel).join(UserModel).join(TableModel).join(RestaurantModel)
+             .where(UserModel.id == user_id))
+        exec = await db.execute(q)
+        bookings = exec.scalars().all()
+        print(bookings)
+        return bookings

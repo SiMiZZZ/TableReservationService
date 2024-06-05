@@ -17,7 +17,7 @@ def generate_available_slots(open_time: time,
     for interval_start, interval_end in intervals:
         is_available = True
         for booking in bookings:
-            if interval_start < booking.time_from.time() and interval_end > booking.time_to.time():
+            if interval_start >= booking.time_from.time() and interval_end <= booking.time_to.time():
                 is_available = False
                 break
         if is_available:

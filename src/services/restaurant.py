@@ -292,3 +292,6 @@ class RestaurantService:
                              db: AsyncSession) -> BookingInfo:
         booking_model = await self.booking_repository.get_booking_by_id(booking_id, db)
         return await self.booking_repository.update_booking(booking_model, booking, db)
+
+    async def get_bookings_by_user(self, user_id: int, db: AsyncSession):
+        return await self.booking_repository.get_bookings_by_user(user_id, db)

@@ -50,6 +50,12 @@ async def get_authorised_user_information(
     return await auth_service.get_user_by_id(user_id, db)
 
 
+@router.get("/user/bookings")
+async def get_bookings_by_user(user_id: int = Depends(get_current_user_id),
+                               db: AsyncSession = Depends(get_db)):
+    return await restaurant_service.get_bookings_by_user(user_id, db)
+
+
 @router.post("/restaurants/tables/{table_id}/booking", response_model=BookingInfo)
 async def create_booking(booking: BookingCreate,
                          table_id: int,
@@ -73,4 +79,5 @@ async def check_exists_table_of_tags(table_exists: TableExistsByData,
 @router.get("/restaurants/{restaurant_id}/tables/{table_id}/schedule", response_model=List[time])
 async def get_schedule(restaurant_id: int, table_id: int, date: datetime = datetime.now(), db: AsyncSession = Depends(get_db)):
     return await restaurant_service.get_table_schedule(restaurant_id, table_id, date, db)
+
 
