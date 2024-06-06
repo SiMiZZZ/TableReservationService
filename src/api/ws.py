@@ -27,8 +27,10 @@ restaurant_service = RestaurantService()
 
 http_bearer = HTTPBearer()
 
-@router.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
+@router.websocket("/{client_id}/{restaurant_id}")
+async def websocket_endpoint(websocket: WebSocket,
+                             client_id: int,
+                             payload: dict = Depends(get_current_token_payload)):
     await manager.connect(websocket)
     try:
         while True:

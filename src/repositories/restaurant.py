@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
-from models.user import User as UserModel
 from models.restautant import Restaurant as RestaurantModel
 from models.table import Table
 from models.restaurant_image import RestaurantImage
@@ -31,7 +30,9 @@ class RestaurantRepository:
 
     async def get_restaurant_by_id_or_none(self, id: int,
                                    db: AsyncSession) -> RestaurantModel | None:
-        q = select(RestaurantModel).where(RestaurantModel.id == id).options(selectinload(RestaurantModel.tables).selectinload(Table.restaurant))
+        q = (select(RestaurantModel).where(RestaurantModel.id == id)
+             .options(selectinload(RestaurantModel.tables)
+             .selectinload(Table.restaurant)))
         exec = await db.execute(q)
         user = exec.scalar()
         return user

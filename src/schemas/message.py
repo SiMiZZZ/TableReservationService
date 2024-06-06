@@ -7,3 +7,6 @@ class MessageCreate(BaseModel):
     owner: OwnerEnum
     data: str
 
+class AdminChat(BaseModel):
+    user_id: int
+    user_name: str

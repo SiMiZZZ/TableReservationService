@@ -4,6 +4,7 @@ from services.database import sessionmanager
 from api.client import router as client_router
 from api.superadmin import router as superadmin_router
 from api.admin import router as admin_router
+from api.ws import router as ws_router
 from api.all_roles import router as all_roles_router
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
@@ -29,8 +30,7 @@ app.include_router(client_router, prefix="/api")
 app.include_router(superadmin_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")
 app.include_router(all_roles_router, prefix="/api")
-
-
+app.include_router(ws_router, prefix="/ws")
 
 origins = [
     "*"
