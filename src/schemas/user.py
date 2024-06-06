@@ -22,6 +22,8 @@ class UserData(BaseModel):
     email: EmailStr
     role: str
     id: int
+    phone_number: str
+    name: str
 
 class NewUserReturn(BaseModel):
     id: int
