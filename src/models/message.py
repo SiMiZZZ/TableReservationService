@@ -20,11 +20,11 @@ class Message(Base):
     __tablename__ = "messages"
 
     id = Column(Integer, primary_key=True, index=True)
-    created_at = Column(sqlalchemy.DateTime(timezone=True), server_default=func.now())
-    data = Column(String)
-    # user_id = Column(Integer, ForeignKey("users.id"))
-    # user = relationship("User", back_populates="chat_messages")
-    restaurant_id = Column(Integer, ForeignKey("restaurants.id"))
-    restaurant = relationship("Restaurant", back_populates="tables")
-    message_owner = Column(Enum(OwnerEnum))
+    # created_at = Column(sqlalchemy.DateTime(timezone=True), server_default=func.now())
+    # data = Column(String)
+    # # user_id = Column(Integer, ForeignKey("users.id"))
+    # # user = relationship("User", back_populates="chat_messages")
+    # restaurant_id = Column(Integer, ForeignKey("restaurants.id"))
+    # restaurant = relationship("Restaurant", back_populates="tables")
+    # message_owner = Column(Enum(OwnerEnum))
 
