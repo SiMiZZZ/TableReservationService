@@ -21,7 +21,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus_data/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /home/simizzz/restaurants_backend/prometheus_data/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
 
@@ -50,7 +50,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./grafana_data:/var/lib/grafana
+      - /home/simizzz/restaurants_backend/grafana_data:/var/lib/grafana
     user: root
 
   redis:
