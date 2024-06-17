@@ -83,7 +83,5 @@ services:
       - /home/simizzz/infra/.env
     container_name: worker_dashboard
     depends_on:
-      - app
-      - redis
       - worker
 
