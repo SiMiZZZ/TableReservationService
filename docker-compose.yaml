@@ -59,3 +59,16 @@ services:
       ports:
         - "6379:6379"
       restart: always
+
+  rabbit:
+    container_name: rabbit
+    restart: always
+    image: rabbitmq
+
+  worker:
+    container_name: worker
+    build: .
+    command: celery -A core.celery worker -l info
+    depends_on:
+      - rabbitmq
+

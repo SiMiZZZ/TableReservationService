@@ -9,6 +9,7 @@ from api.all_roles import router as all_roles_router
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 from typing import Optional
+from worker import say_hello
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -51,3 +52,5 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     yield
 
 Instrumentator().instrument(app).expose(app)
+
+say_hello.delay("test_name")
