@@ -68,7 +68,22 @@ services:
   worker:
     container_name: worker
     build: .
-    command: bash -c "cd src && celery -A worker.app worker -l info"
+    env_file:
+      - /home/simizzz/infra/.env
+    command: bash -c "cd src && celery -A worker.app beat -l info"
     depends_on:
       - rabbit
+
+  worker_dashboard:
+    build: ./
+    command: bash -c "cd src && poetry run celery -A worker.app flower"
+    ports:
+      - "5555:5555"
+    env_file:
+      - /home/simizzz/infra/.env
+    container_name: worker_dashboard
+    depends_on:
+      - app
+      - redis
+      - worker
 
