@@ -53,4 +53,3 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 Instrumentator().instrument(app).expose(app)
 
-say_hello.delay("test_name")
