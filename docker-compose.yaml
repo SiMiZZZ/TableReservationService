@@ -76,7 +76,7 @@ services:
 
   worker_dashboard:
     build: ./
-    command: bash -c "cd src && poetry run celery flower -A worker.app  --broker_api=http://guest:guest@rabbit:15672/api"
+    command: bash -c "cd src && poetry run celery-A worker.app flower --broker_api=http://guest:guest@rabbit:15672/api"
     ports:
       - "5555:5555"
     env_file:
