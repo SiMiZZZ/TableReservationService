@@ -24,3 +24,5 @@ def generate_available_slots(open_time: time,
             available_intervals.append(interval_start)
 
     return available_intervals
+
+

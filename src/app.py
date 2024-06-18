@@ -9,7 +9,7 @@ from api.all_roles import router as all_roles_router
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 from typing import Optional
-from worker import say_hello
+import worker
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager

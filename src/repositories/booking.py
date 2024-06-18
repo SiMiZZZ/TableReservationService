@@ -43,6 +43,15 @@ class BookingRepository:
         bookings = exec.scalars().all()
         return bookings
 
+    async def get_bookings_by_status(self, status: str, db: AsyncSession) -> List[BookingModel]:
+        q = (select(BookingModel).join(TableModel)
+             .where(BookingModel.status == status)
+             .options(selectinload(BookingModel.table))
+             .options(selectinload(BookingModel.user)))
+        exec = await db.execute(q)
+        bookings = exec.scalars().all()
+        return bookings
+
     async def get_booking_by_id(self, booking_id: int, db: AsyncSession):
         q = (select(BookingModel).join(TableModel).join(RestaurantModel)
              .where(BookingModel.id == booking_id))
@@ -60,7 +69,7 @@ class BookingRepository:
         return bookings
 
     async def update_booking(self,
-                             booking_model: RestaurantModel,
+                             booking_model: BookingModel,
                              booking: BookingUpdate,
                              db: AsyncSession) -> BookingModel:
         for name, value in booking.model_dump(exclude_unset=True).items():
@@ -74,5 +83,4 @@ class BookingRepository:
              .where(UserModel.id == user_id))
         exec = await db.execute(q)
         bookings = exec.scalars().all()
-        print(bookings)
         return bookings

@@ -1,11 +1,18 @@
 from time import sleep
 from celery import Celery
+from celery.schedules import crontab
+
+
 
 broker_url = "amqp://guest@rabbit//"
 app = Celery('tasks', broker=broker_url)
 
-@app.task
-def say_hello(name: str):
-    sleep(5)
-    return f"Hello {name}"
+app.conf.beat_schedule = {
+    'check_complered_bookings': {
+        'task': 'services.celery.update_completed_bookings_status',
+        'schedule': crontab(minute="*/1"),
+    }
+}
+
+
 
