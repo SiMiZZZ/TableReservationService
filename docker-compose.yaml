@@ -63,8 +63,6 @@ services:
   rabbit:
     container_name: rabbit
     restart: always
-    ports:
-      - "15672:15672"
     image: rabbitmq
 
   worker:
@@ -78,7 +76,7 @@ services:
 
   worker_dashboard:
     build: ./
-    command: bash -c "cd src && poetry run celery flower -A worker.app  --broker_api=http://guest:guest@localhost:15672/api"
+    command: bash -c "cd src && poetry run celery flower -A worker.app  --broker_api=http://guest:guest@rabbit:15672/api"
     ports:
       - "5555:5555"
     env_file:
